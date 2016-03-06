@@ -1,5 +1,4 @@
 ##STEP ZERO: LOAD LIBRARIES
-library(lubridate)
 library(dplyr)
 
 
@@ -35,6 +34,7 @@ add_features <- data.frame(V1 = c(1,2),V2 = c("Subject", "Activity"))
 
 ##Add the column labels to the 
 features <- rbind(features, add_features)
+colnames(grouped_data) <- features$V2
 #grouped_data <- grouped_data %>% rename(Activity = V2)
 
 ##ADD THE ACTIVITY NAMES
@@ -66,8 +66,11 @@ names(reduced_data) <- gsub("Gravity", "Gravity_", names(reduced_data))
 ##FINAL: CLEAN DATA OUTPUT
 tidy_data <- tbl_df(reduced_data)
 
+write.table(tidy_data, "tidy_data.txt")
+
 ##STEP FIVE: CREATE A MEAN OF EVERY COLUMN BY PARTICIPANT AND ACTIVITY
 
-df <- tidy_data %>%
+calc_data <- tidy_data %>%
 	group_by(Subject, V2) %>%
 	summarise_each(funs(mean))
+write.table(calc_data, "calc_data.txt")
